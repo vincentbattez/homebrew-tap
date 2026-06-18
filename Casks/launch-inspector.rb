@@ -1,6 +1,6 @@
 cask "launch-inspector" do
-  version "0.3.0"
-  sha256 "b2566c8acd2846e5a82050d6bc1c6e0b21b0d46da637da19878d891d86736389"
+  version "0.3.1"
+  sha256 "a3efd3c8d0c79cc9c3d7592ccb242f3ff6524dbaf88873823562df23c2048bd7"
 
   url "https://github.com/vincentbattez/launchs-and-crons-inspector/releases/download/v#{version}/LaunchInspector-#{version}.dmg"
   name "LaunchInspector"
