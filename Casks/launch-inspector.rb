@@ -13,8 +13,9 @@ cask "launch-inspector" do
   app "LaunchInspector.app"
 
   caveats <<~EOS
-    LaunchInspector is an unsigned build. On first launch, right-click the app in
-    /Applications and choose Open to get past Gatekeeper (once). After that it
-    updates itself via Sparkle.
+    LaunchInspector is an unsigned build. The first launch is blocked by Gatekeeper:
+    open it once, then go to System Settings > Privacy & Security and click
+    "Open Anyway" (on macOS 14 you can instead right-click the app > Open).
+    After that it updates itself via Sparkle.
   EOS
 end
