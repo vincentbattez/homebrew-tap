@@ -14,3 +14,4 @@ brew install <formula>
 | Formula | Description |
 |---------|-------------|
 | [`auto-switch-mic`](https://github.com/vincentbattez/auto-switch-mic) | macOS menu bar agent that auto-switches audio input to a preferred mic |
+| [`launch-inspector`](https://github.com/vincentbattez/launchs-and-crons-inspector) | macOS app that lists your cron jobs and launchd plists, with state and schedule |
