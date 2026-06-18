@@ -17,8 +17,8 @@
 class LaunchInspector < Formula
   desc "macOS app that lists your cron jobs and launchd plists, with state and schedule"
   homepage "https://github.com/vincentbattez/launchs-and-crons-inspector"
-  url "https://github.com/vincentbattez/launchs-and-crons-inspector/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "6fb0fae98ff95b4a4319acc5072b69b695fd2c8c3f0b9841b54d32fa3750d247"
+  url "https://github.com/vincentbattez/launchs-and-crons-inspector/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "933d50cc7b381cf496cd3a62e722b1a2bb8b99fa44cd91ee7ea27f9c37654c98"
   license "MIT"
   head "https://github.com/vincentbattez/launchs-and-crons-inspector.git", branch: "main"
 
@@ -43,6 +43,7 @@ class LaunchInspector < Formula
     (app/"Contents/Resources").mkpath
 
     cp bin_path, macos_dir/"LaunchInspector"
+    cp "Resources/AppIcon.icns", app/"Contents/Resources/AppIcon.icns"
     (app/"Contents/Info.plist").write info_plist_content
 
     # Ad-hoc sign so Gatekeeper accepts the bundle without an Apple Developer ID.
@@ -86,6 +87,8 @@ class LaunchInspector < Formula
           <string>LaunchInspector</string>
           <key>CFBundleIdentifier</key>
           <string>com.vincentbattez.launch-inspector</string>
+          <key>CFBundleIconFile</key>
+          <string>AppIcon</string>
           <key>CFBundlePackageType</key>
           <string>APPL</string>
           <key>CFBundleShortVersionString</key>
@@ -94,6 +97,10 @@ class LaunchInspector < Formula
           <string>#{version}</string>
           <key>LSMinimumSystemVersion</key>
           <string>14.0</string>
+          <key>LSApplicationCategoryType</key>
+          <string>public.app-category.developer-tools</string>
+          <key>NSHumanReadableCopyright</key>
+          <string>© 2026 Vincent Battez. MIT License.</string>
           <key>NSHighResolutionCapable</key>
           <true/>
       </dict>
