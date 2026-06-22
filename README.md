@@ -14,7 +14,7 @@ brew install --cask <cask>      # casks below
 
 | Formula | Description |
 |---------|-------------|
-| [`auto-switch-mic`](https://github.com/vincentbattez/auto-switch-mic) | macOS menu bar agent that auto-switches audio input to a preferred mic |
+| [`auto-switch-in-out-menubar`](https://github.com/vincentbattez/auto-switch-in-out-menubar) | macOS menu bar agent that auto-switches audio input to a preferred mic |
 
 ## Casks
 

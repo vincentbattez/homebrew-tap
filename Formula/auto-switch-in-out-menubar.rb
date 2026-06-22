@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Homebrew formula for auto-switch-mic.
+# Homebrew formula for auto-switch-in-out-menubar.
 #
 # This file lives in the SOURCE repo for reference, but it must be COPIED into
 # the tap repo (e.g. github.com/<you>/homebrew-tap/Formula/) to actually be
@@ -9,29 +9,29 @@
 # Update procedure on each new release:
 #   1. tag a new version on the source repo (e.g. v0.1.1)
 #   2. compute the tarball sha256:
-#        curl -sL https://github.com/<you>/auto-switch-mic/archive/refs/tags/v0.1.1.tar.gz | shasum -a 256
+#        curl -sL https://github.com/<you>/auto-switch-in-out-menubar/archive/refs/tags/v0.1.1.tar.gz | shasum -a 256
 #   3. bump `url` and `sha256` below
 #   4. commit + push to the tap repo
-#   5. users get the update with `brew update && brew upgrade auto-switch-mic`
+#   5. users get the update with `brew update && brew upgrade auto-switch-in-out-menubar`
 
-class AutoSwitchMic < Formula
+class AutoSwitchInOutMenubar < Formula
   desc "macOS menu bar agent that auto-switches audio input to a preferred mic"
-  homepage "https://github.com/vincentbattez/auto-switch-mic"
-  url "https://github.com/vincentbattez/auto-switch-mic/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "e93d68629e353c61ec0e78630ba22ea9736623ecd076f7ab39cbd1538510beaf"
+  homepage "https://github.com/vincentbattez/auto-switch-in-out-menubar"
+  url "https://github.com/vincentbattez/auto-switch-in-out-menubar/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "05fc8dc0d29c72bdb44b565edf3909fbd61c109ba98182bb47a7ea5aea2613eb"
   license "MIT"
-  head "https://github.com/vincentbattez/auto-switch-mic.git", branch: "main"
+  head "https://github.com/vincentbattez/auto-switch-in-out-menubar.git", branch: "main"
 
   depends_on :macos
   depends_on macos: :ventura # macOS 13+ required for SF Symbols configuration APIs in use
   depends_on xcode: ["14.0", :build]
 
-  APP_BUNDLE_NAME = "Auto Switch Mic.app"
+  APP_BUNDLE_NAME = "Auto Switch In Out.app"
 
   def install
     # Compile both binaries from source. swiftc ships with Xcode CLT.
     system "swiftc", "-O", "toast.swift", "-o", "toast"
-    system "swiftc", "-O", "auto-switch-mic.swift", "-o", "auto-switch-mic"
+    system "swiftc", "-O", "auto-switch-in-out-menubar.swift", "-o", "auto-switch-in-out-menubar"
 
     # Build a minimal .app bundle so the agent is launchable from Spotlight,
     # Finder, or Launchpad (after the user symlinks it into /Applications/ —
@@ -43,7 +43,7 @@ class AutoSwitchMic < Formula
     macos_dir.mkpath
     (app/"Contents/Resources").mkpath
 
-    cp "auto-switch-mic", macos_dir/"auto-switch-mic"
+    cp "auto-switch-in-out-menubar", macos_dir/"auto-switch-in-out-menubar"
     cp "toast",            macos_dir/"toast"
 
     (app/"Contents/Info.plist").write info_plist_content
@@ -52,31 +52,31 @@ class AutoSwitchMic < Formula
     system "/usr/bin/codesign", "--force", "--deep", "--sign", "-", app
 
     # Expose the agent as a CLI command in PATH (also used by `brew services`).
-    bin.write_exec_script macos_dir/"auto-switch-mic"
+    bin.write_exec_script macos_dir/"auto-switch-in-out-menubar"
   end
 
   service do
-    run [opt_libexec/APP_BUNDLE_NAME/"Contents/MacOS/auto-switch-mic"]
+    run [opt_libexec/APP_BUNDLE_NAME/"Contents/MacOS/auto-switch-in-out-menubar"]
     keep_alive successful_exit: false
-    log_path var/"log/auto-switch-mic.log"
-    error_log_path var/"log/auto-switch-mic.log"
+    log_path var/"log/auto-switch-in-out-menubar.log"
+    error_log_path var/"log/auto-switch-in-out-menubar.log"
     run_type :immediate
   end
 
   def caveats
     <<~EOS
       ▸ Auto-start at login (background service):
-          brew services start auto-switch-mic
+          brew services start auto-switch-in-out-menubar
 
       ▸ Make it launchable from Spotlight (recommended):
           ln -sf "#{opt_libexec}/#{APP_BUNDLE_NAME}" /Applications/
 
-        Then Cmd+Space → "Auto Switch Mic".
+        Then Cmd+Space → "Auto Switch In Out".
 
       ▸ Stop the service:
-          brew services stop auto-switch-mic
+          brew services stop auto-switch-in-out-menubar
 
-      Logs: #{var}/log/auto-switch-mic.log
+      Logs: #{var}/log/auto-switch-in-out-menubar.log
     EOS
   end
 
@@ -87,13 +87,13 @@ class AutoSwitchMic < Formula
       <plist version="1.0">
       <dict>
           <key>CFBundleDisplayName</key>
-          <string>Auto Switch Mic</string>
+          <string>Auto Switch In Out</string>
           <key>CFBundleName</key>
-          <string>Auto Switch Mic</string>
+          <string>Auto Switch In Out</string>
           <key>CFBundleExecutable</key>
-          <string>auto-switch-mic</string>
+          <string>auto-switch-in-out-menubar</string>
           <key>CFBundleIdentifier</key>
-          <string>com.auto-switch-mic.app</string>
+          <string>com.auto-switch-in-out-menubar.app</string>
           <key>CFBundlePackageType</key>
           <string>APPL</string>
           <key>CFBundleShortVersionString</key>
@@ -112,7 +112,7 @@ class AutoSwitchMic < Formula
   test do
     # Smoke tests: binaries exist as Mach-O and the .app structure is valid.
     macos_dir = libexec/APP_BUNDLE_NAME/"Contents/MacOS"
-    assert_match(/Mach-O/, shell_output("file -b #{macos_dir}/auto-switch-mic"))
+    assert_match(/Mach-O/, shell_output("file -b #{macos_dir}/auto-switch-in-out-menubar"))
     assert_match(/Mach-O/, shell_output("file -b #{macos_dir}/toast"))
     assert_predicate libexec/APP_BUNDLE_NAME/"Contents/Info.plist", :exist?
     system "/usr/bin/codesign", "--verify", libexec/APP_BUNDLE_NAME
